@@ -1,0 +1,6 @@
+{
+    "name": "LoJack",
+    "domains": ["sensor"],
+    "homeassistant": "0.115.0",
+    "render_readme": true
+}

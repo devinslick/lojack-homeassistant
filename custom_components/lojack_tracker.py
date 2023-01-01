@@ -1,30 +1,55 @@
-from homeassistant.components.device_tracker import DOMAIN
 from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
-from homeassistant.helpers.event import track_time_change
-from .lojack_tracker import LoJackDeviceTracker
+from homeassistant.helpers.entity import Entity
+from lojack_clients.identity import AuthenticatedClient as IdentityClient
+from lojack_clients.identity.api.default import get_identity_token
+from lojack_clients.services import AuthenticatedClient as ServicesClient
+from lojack_clients.services.api.default import get_all_user_assets
+from lojack_clients.services.models import GetAllUserAssetsResponse200
+from lojack_clients.services.types import Response as ServicesResponse
 
-class LoJackDeviceTracker:
+class LoJackSensor(Entity):
     def __init__(self, hass, config):
         self.hass = hass
         self.username = config[CONF_USERNAME]
         self.password = config[CONF_PASSWORD]
-        self.devices = {}
 
-        track_time_change(self.hass, self.update_devices, minute=range(0, 60, 15))
+        self.attributes = {}
+        self.update()
 
-    def update_devices(self, now):
-        lojack_api = lojack_clients.Client(self.username, self.password)
-        devices = lojack_api.get_devices()
+    def update(self):
+        identity_client = IdentityClient.from_login(self.username, self.password)
+        token_response = get_identity_token.sync(client=identity_client)
 
-        for device in devices:
-            if device['id'] not in self.devices:
-                self.devices[device['id']] = device
-                self.hass.states.set(f"{DOMAIN}.{device['name']}", device['status'], {
-                    'friendly_name': device['name'],
+        services_client = ServicesClient.from_token(token_response.token)
+        assets_response: GetAllUserAssetsResponse200 = get_all_user_assets.sync(client=services_client)
+
+        self._state = assets_response.num_assets
+        self.attributes = {}
+        for asset in assets_response.assets:
+            self.attributes[asset.name] = asset.id
+
+        for asset in assets_response.assets:
+            if asset['id'] not in self.devices:
+                self.asset[assets_response.assets['id']] = asset
+                self.hass.states.set(f"{DOMAIN}.{asset['name']}", asset['status'], {
+                    'friendly_name': asset['name'],
                     'icon': 'mdi:car'
                 })
             else:
-                self.hass.states.set(f"{DOMAIN}.{device['name']}", device['status'], {
-                    'friendly_name': device['name'],
+                self.hass.states.set(f"{DOMAIN}.{asset['name']}", asset['status'], {
+                    'friendly_name': asset['name'],
                     'icon': 'mdi:car'
                 })
+
+
+    @property
+    def name(self):
+        return 'LoJack Sensor'
+
+    @property
+    def state(self):
+        return self._state
+
+    @property
+    def device_state_attributes(self):
+        return self.attributes
