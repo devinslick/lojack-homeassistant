@@ -1,8 +1,10 @@
 {
   "name": "LoJack Tracker",
   "description": "Track the location of your LoJack-enabled devices.",
-  "dependencies": [
-    "lojack-clients"
+  "homeassistant": "0.104.0",
+  "domains": ["device_tracker"],
+  "requirements": [
+    "lojack-clients==1.0.0"
   ],
   "config_schema": {
     "type": "object",
@@ -20,5 +22,6 @@
       "username",
       "password"
     ]
-  }
+  },
+  "issue_tracker_url": "https://github.com/devinslick/lojack-homeassistant/issues"
 }
