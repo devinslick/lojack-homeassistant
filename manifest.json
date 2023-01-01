@@ -1,0 +1,24 @@
+{
+  "name": "LoJack Tracker",
+  "description": "Track the location of your LoJack-enabled devices.",
+  "dependencies": [
+    "lojack-clients"
+  ],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "username": {
+        "type": "string",
+        "description": "Your LoJack account username."
+      },
+      "password": {
+        "type": "string",
+        "description": "Your LoJack account password."
+      }
+    },
+    "required": [
+      "username",
+      "password"
+    ]
+  }
+}
