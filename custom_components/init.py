@@ -1,4 +1,4 @@
-from .lojack_tracker import LoJackDeviceTracker
+from lojack_sensor import LoJackSensor
 
 def setup(hass, config):
-    return LoJackDeviceTracker(hass, config)
+    return LoJackSensor(hass, config)
