@@ -1,27 +1,12 @@
 {
-  "name": "LoJack Tracker",
-  "description": "Track the location of your LoJack-enabled devices.",
-  "homeassistant": "0.104.0",
-  "domains": ["device_tracker"],
+  "domain": "lojack",
+  "name": "LoJack for Home Assistant",
+  "integration_type": "hub",
+  "documentation": "https://github.com/devinslick/lojack-homeassistant",
+  "dependencies": [],
+  "codeowners": "devinslick",
   "requirements": [
-    "lojack-clients==1.0.0"
+    "lojack-clients==1.0.2"
   ],
-  "config_schema": {
-    "type": "object",
-    "properties": {
-      "username": {
-        "type": "string",
-        "description": "Your LoJack account username."
-      },
-      "password": {
-        "type": "string",
-        "description": "Your LoJack account password."
-      }
-    },
-    "required": [
-      "username",
-      "password"
-    ]
-  },
-  "issue_tracker_url": "https://github.com/devinslick/lojack-homeassistant/issues"
+  "iot_class": "cloud_polling"
 }
