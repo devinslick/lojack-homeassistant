@@ -1,7 +1,7 @@
 from homeassistant.components.device_tracker import DOMAIN
 from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
 from homeassistant.helpers.event import track_time_change
-import lojack_clients
+from .lojack_tracker import LoJackDeviceTracker
 
 class LoJackDeviceTracker:
     def __init__(self, hass, config):
