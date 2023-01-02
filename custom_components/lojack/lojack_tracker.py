@@ -1,43 +1,48 @@
 import lojack-clients
-from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
-from homeassistant.helpers.entity import Entity
-from lojack-clients.identity import AuthenticatedClient as IdentityClient
-from lojack-clients.identity.api.default import get_identity_token
-from lojack-clients.services import AuthenticatedClient as ServicesClient
-from lojack-clients.services.api.default import get_all_user_assets
-from lojack-clients.services.models import GetAllUserAssetsResponse200
-from lojack-client.services.types import Response as ServicesResponse
 
-class LoJackSensor(Entity):
-    def __init__(self, hass, config):
+from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
+from homeassistant.helpers.event import async_track_time_interval
+from homeassistant.helpers.entity import Entity
+
+def setup_platform(hass, config, add_entities, discovery_info=None):
+    username = config[CONF_USERNAME]
+    password = config[CONF_PASSWORD]
+
+    lojack_tracker = LoJackTracker(hass, username, password)
+    lojack_tracker.update()
+    add_entities(lojack_tracker.device_list)
+
+    async_track_time_interval(hass, lojack_tracker.update, minutes=15)
+
+class LoJackTracker:
+    def __init__(self, hass, username, password):
         self.hass = hass
-        self.username = config[CONF_USERNAME]
-        self.password = config[CONF_PASSWORD]
+        self.username = username
+        self.password = password
+
+        self.device_list = []
         self.update()
 
     def update(self):
-        identity_client = IdentityClient.from_login(self.username, self.password)
-        token_response = get_identity_token.sync(client=identity_client)
+        identity_client = lojack-clients.IdentityClient.from_login(self.username, self.password)
+        token_response = lojack-clients.get_identity_token.sync(client=identity_client)
 
-        services_client = ServicesClient.from_token(token_response.token)
-        assets_response: GetAllUserAssetsResponse200 = get_all_user_assets.sync(client=services_client)
+        services_client = lojack-clients.ServicesClient.from_token(token_response.token)
+        assets_response: lojack-clients.GetAllUserAssetsResponse200 = lojack-clients.get_all_user_assets.sync(client=services_client)
 
-        self._state = assets_response.num_assets
-
+        self.device_list = []
         for asset in assets_response.assets:
-            entity_id = "device_tracker.{}".format(asset.name)
-            if entity_id not in self.hass.states:
-                self.hass.states.set(entity_id, asset.id)
-            self.device_attributes[entity_id] = asset.attributes
-                
+            device = LoJackDevice(asset)
+            self.device_list.append(device)
+
+class LoJackDevice(Entity):
+    def __init__(self, asset):
+        self.asset = asset
+
     @property
     def name(self):
-        return 'LoJack Sensor'
-
-    @property
-    def state(self):
-        return self._state
+        return self.asset.name
 
     @property
     def device_state_attributes(self):
-        return self.attributes
+        return self.asset.attributes
