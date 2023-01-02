@@ -1,8 +1,0 @@
-name: LoJack
-author: Devin Slick
-repository: https://github.com/devinslick/lojack-homeassistant
-category: integration
-branches:
-  - master
-homeassistant:
-  min_version: 0.100.0
