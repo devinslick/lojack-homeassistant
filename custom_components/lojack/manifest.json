@@ -1,23 +1,15 @@
 {
   "name": "LoJack",
-  "version": "1.0.0",
-  "summary": "An integration for tracking LoJack devices",
   "author": "Devin Slick",
+  "description": "A Home Assistant integration for tracking LoJack devices",
+  "domain": "lojack",
+  "url": "https://github.com/devinslick/lojack-homeassistant",
+  "version": "0.1.0",
   "homeassistant": {
-    "config_flow": "True",
-    "domain": "lojack",
-    "requirements": ["lojack-clients==1.0.2"],
-    "config": {
-      "username": {
-        "type": "string",
-        "description": "Your LoJack username",
-        "required": true
-      },
-      "password": {
-        "type": "string",
-        "description": "Your LoJack password",
-        "required": true
-      }
-    }
+    "name": "LoJack",
+    "services": [],
+    "config_flow": false,
+    "dependencies": ["lojack-clients==1.0.2"],
+    "requirements": []
   }
 }
