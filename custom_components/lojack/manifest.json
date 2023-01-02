@@ -1,30 +1,23 @@
 {
-  "domain": "lojack",
-  "name": "LoJack for Home Assistant",
-  "integration_type": "hub",
-  "documentation": "https://github.com/devinslick/lojack-homeassistant",
-  "dependencies": [],
-  "codeowners": "devinslick",
-  "requirements": [
-    "lojack-clients==1.0.2"
-  ],
-  "config_schema": {
-    "type": "object",
-    "properties": {
+  "name": "LoJack",
+  "version": "1.0.0",
+  "summary": "An integration for tracking LoJack devices",
+  "author": "Devin Slick",
+  "homeassistant": {
+    "config_flow": "True",
+    "domain": "lojack",
+    "requirements": ["lojack-clients==1.0.2"],
+    "config": {
       "username": {
         "type": "string",
-        "description": "Your LoJack account username."
+        "description": "Your LoJack username",
+        "required": true
       },
       "password": {
         "type": "string",
-        "description": "Your LoJack account password."
+        "description": "Your LoJack password",
+        "required": true
       }
-    },
-    "required": [
-      "username",
-      "password"
-    ]
-  },
-  "issue_tracker_url": "https://github.com/devinslick/lojack-homeassistant/issues",
-  "iot_class": "cloud_polling"
+    }
+  }
 }
