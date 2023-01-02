@@ -1,11 +1,12 @@
+import lojack-clients
 from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
 from homeassistant.helpers.entity import Entity
-from lojack_clients.identity import AuthenticatedClient as IdentityClient
-from lojack_clients.identity.api.default import get_identity_token
-from lojack_clients.services import AuthenticatedClient as ServicesClient
-from lojack_clients.services.api.default import get_all_user_assets
-from lojack_clients.services.models import GetAllUserAssetsResponse200
-from lojack_clients.services.types import Response as ServicesResponse
+from lojack-clients.identity import AuthenticatedClient as IdentityClient
+from lojack-clients.identity.api.default import get_identity_token
+from lojack-clients.services import AuthenticatedClient as ServicesClient
+from lojack-clients.services.api.default import get_all_user_assets
+from lojack-clients.services.models import GetAllUserAssetsResponse200
+from lojack-client.services.types import Response as ServicesResponse
 
 class LoJackSensor(Entity):
     def __init__(self, hass, config):
