@@ -8,5 +8,23 @@
   "requirements": [
     "lojack-clients==1.0.2"
   ],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "username": {
+        "type": "string",
+        "description": "Your LoJack account username."
+      },
+      "password": {
+        "type": "string",
+        "description": "Your LoJack account password."
+      }
+    },
+    "required": [
+      "username",
+      "password"
+    ]
+  },
+  "issue_tracker_url": "https://github.com/devinslick/lojack-homeassistant/issues",
   "iot_class": "cloud_polling"
 }

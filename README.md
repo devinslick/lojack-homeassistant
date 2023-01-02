@@ -3,4 +3,6 @@
 
 Track the location of your LoJack-enabled devices using Home Assistant.
 
-Work in progress...
+Work in progress... 
+
+*NOT FUNCTIONAL YET*

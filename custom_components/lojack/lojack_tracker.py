@@ -12,8 +12,6 @@ class LoJackSensor(Entity):
         self.hass = hass
         self.username = config[CONF_USERNAME]
         self.password = config[CONF_PASSWORD]
-
-        self.attributes = {}
         self.update()
 
     def update(self):
@@ -24,24 +22,13 @@ class LoJackSensor(Entity):
         assets_response: GetAllUserAssetsResponse200 = get_all_user_assets.sync(client=services_client)
 
         self._state = assets_response.num_assets
-        self.attributes = {}
-        for asset in assets_response.assets:
-            self.attributes[asset.name] = asset.id
 
         for asset in assets_response.assets:
-            if asset['id'] not in self.devices:
-                self.asset[assets_response.assets['id']] = asset
-                self.hass.states.set(f"{DOMAIN}.{asset['name']}", asset['status'], {
-                    'friendly_name': asset['name'],
-                    'icon': 'mdi:car'
-                })
-            else:
-                self.hass.states.set(f"{DOMAIN}.{asset['name']}", asset['status'], {
-                    'friendly_name': asset['name'],
-                    'icon': 'mdi:car'
-                })
-
-
+            entity_id = "device_tracker.{}".format(asset.name)
+            if entity_id not in self.hass.states:
+                self.hass.states.set(entity_id, asset.id)
+            self.device_attributes[entity_id] = asset.attributes
+                
     @property
     def name(self):
         return 'LoJack Sensor'
