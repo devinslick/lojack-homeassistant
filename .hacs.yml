@@ -1,0 +1,6 @@
+type: integration
+name: LoJack
+author: Devin Slick
+repository: https://github.com/devinslick/lojack-homeassistant
+track:
+  - release
