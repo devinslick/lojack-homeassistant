@@ -1,6 +1,5 @@
-type: integration
-name: LoJack
+name: LoJack Integration
+description: Track the location of your LoJack-enabled devices in Home Assistant.
 author: Devin Slick
 repository: https://github.com/devinslick/lojack-homeassistant
-track:
-  - release
+category: integration
